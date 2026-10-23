@@ -1,0 +1,36 @@
+name: B-Stock monitor
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"  # every 30 min (GitHub may delay scheduled runs)
+  workflow_dispatch:         # allows a manual run from the Actions tab
+
+permissions:
+  contents: write  # to commit state.json
+
+concurrency: bstock
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check B-Stock
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          MAIL_TO: ${{ secrets.MAIL_TO }}
+        run: python check_bstock.py
+
+      - name: Save state
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add state.json
+          git diff --cached --quiet || (git commit -m "Update B-Stock state" && git push)
