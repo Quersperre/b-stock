@@ -1,5 +1,13 @@
 {
   "https://www.thomann.ro/taylor_414ce_next_generation_natural.htm": {
     "available": false
+  },
+  "https://www.thomann.ro/taylor_314ce_next_generation.htm": {
+    "available": false
+  },
+  "https://www.thomann.ro/taylor_324ce_next_generation.htm": {
+    "available": true,
+    "text": "B-Stock disponibil 13.090 lei din",
+    "bstock_url": "https://www.thomann.ro/taylor_324ce_next_generation_b_stock.htm"
   }
 }
