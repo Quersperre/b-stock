@@ -2,7 +2,7 @@ name: B-Stock monitor
 
 on:
   schedule:
-    - cron: "*/30 * * * *"  # every 30 min (GitHub may delay scheduled runs)
+    - cron: "*/15 * * * *"  # every 15 min (GitHub may delay scheduled runs)
   workflow_dispatch:         # allows a manual run from the Actions tab
 
 permissions:
@@ -33,4 +33,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
           git add state.json
-          git diff --cached --quiet || (git commit -m "Update B-Stock state" && git push)
+          if ! git diff --cached --quiet; then
+            git commit -m "Update B-Stock state" && git push
+          elif [ $(( $(date +%s) - $(git log -1 --format=%ct) )) -gt 2592000 ]; then
+            # No commit for 30 days: keep the repo active so GitHub doesn't
+            # disable the schedule (public repos, 60 days of inactivity).
+            git commit --allow-empty -m "Keepalive" && git push
+          fi

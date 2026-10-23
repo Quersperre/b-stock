@@ -20,6 +20,8 @@ from pathlib import Path
 # Products to watch. Add more URLs as needed.
 URLS = [
     "https://www.thomann.ro/taylor_414ce_next_generation_natural.htm",
+    "https://www.thomann.ro/taylor_314ce_next_generation.htm",
+    "https://www.thomann.ro/taylor_324ce_next_generation.htm",
 ]
 
 STATE_FILE = Path(__file__).with_name("state.json")
