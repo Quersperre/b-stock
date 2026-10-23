@@ -66,7 +66,7 @@ def send_email(subject, body):
     user, password = os.environ.get("SMTP_USER"), os.environ.get("SMTP_PASS")
     if not (user and password):
         print(f"[no SMTP credentials, not emailing]\n{subject}\n{body}")
-        return
+        return False
     msg = EmailMessage()
     msg["Subject"] = subject
     msg["From"] = user
@@ -76,6 +76,7 @@ def send_email(subject, body):
         smtp.login(user, password)
         smtp.send_message(msg)
     print(f"Email sent: {subject}")
+    return True
 
 
 def main():
@@ -96,11 +97,14 @@ def main():
 
         # Notify only on the transition not-available -> available.
         if available and not was_available:
-            send_email(
+            sent = send_email(
                 "B-Stock available: " + url.rsplit("/", 1)[-1].removesuffix(".htm"),
                 f"{details['text']}\n\nB-Stock item: {details['bstock_url']}\n"
                 f"Product page: {url}\n",
             )
+            if not sent:
+                # Leave state unchanged so the alert is retried next run.
+                continue
         state[url] = {"available": available, **details}
 
     STATE_FILE.write_text(json.dumps(state, indent=2, ensure_ascii=False) + "\n")
