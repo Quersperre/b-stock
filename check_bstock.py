@@ -13,6 +13,7 @@ import os
 import re
 import smtplib
 import sys
+import time
 import urllib.request
 from email.message import EmailMessage
 from pathlib import Path
@@ -34,6 +35,7 @@ URLS = [
 ]
 
 STATE_FILE = Path(__file__).with_name("state.json")
+PAUSE = 3  # seconds between page requests
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -73,6 +75,16 @@ def check(url):
     return False, {}
 
 
+def check_with_retry(url, attempts=3):
+    for i in range(attempts):
+        try:
+            return check(url)
+        except Exception:
+            if i == attempts - 1:
+                raise
+            time.sleep(15 * (i + 1))
+
+
 def price(text):
     """Extract the price from e.g. 'B-Stock disponibil 10.690 lei din'."""
     m = re.search(r"(\d[\d.,]*)\s*lei", text)
@@ -100,11 +112,14 @@ def main():
     state = json.loads(STATE_FILE.read_text()) if STATE_FILE.exists() else {}
     errors = 0
 
-    for url in URLS:
+    for n, url in enumerate(URLS):
+        if n:
+            time.sleep(PAUSE)  # be gentle: space out requests
         try:
-            available, details = check(url)
+            available, details = check_with_retry(url)
         except Exception as e:
-            print(f"ERROR {url}: {e}", file=sys.stderr)
+            # "::warning::" shows up as an annotation on the GitHub run page.
+            print(f"::warning::{url}: {type(e).__name__}: {e}")
             errors += 1
             continue
 
@@ -134,7 +149,12 @@ def main():
         state[url] = {"available": available, **details}
 
     STATE_FILE.write_text(json.dumps(state, indent=2, ensure_ascii=False) + "\n")
-    return 1 if errors else 0
+    # Fail the run (GitHub then emails you) only if every page failed,
+    # i.e. we're blocked; occasional single-page errors are just warnings.
+    if errors == len(URLS):
+        print("::error::All pages failed to load - blocked by Thomann?")
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
