@@ -9,5 +9,36 @@
     "available": true,
     "text": "B-Stock disponibil 13.090 lei din",
     "bstock_url": "https://www.thomann.ro/taylor_324ce_next_generation_b_stock.htm"
+  },
+  "https://www.thomann.ro/taylor_324ce_studio_special_edition.htm": {
+    "available": false
+  },
+  "https://www.thomann.ro/taylor_be_324ce_next_generation.htm": {
+    "available": false
+  },
+  "https://www.thomann.ro/taylor_314ce_studio_seb.htm": {
+    "available": false
+  },
+  "https://www.thomann.ro/taylor_314ce_studio_natural.htm": {
+    "available": false
+  },
+  "https://www.thomann.ro/taylor_414ce_studio.htm": {
+    "available": true,
+    "text": "B-Stock disponibil 10.190 lei din",
+    "bstock_url": "https://www.thomann.ro/taylor_414ce_studio_b_stock.htm"
+  },
+  "https://www.thomann.ro/taylor_414ce_studio_shaded_edgeburst.htm": {
+    "available": true,
+    "text": "B-Stock disponibil 10.777 lei din",
+    "bstock_url": "https://www.thomann.ro/taylor_414ce_studio_shaded_ed_b_stock.htm"
+  },
+  "https://www.thomann.ro/taylor_224ce_k_dlx_461433.htm": {
+    "available": false
+  },
+  "https://www.thomann.ro/taylor_14ce.htm": {
+    "available": false
+  },
+  "https://www.thomann.ro/taylor_24ce.htm": {
+    "available": false
   }
 }
