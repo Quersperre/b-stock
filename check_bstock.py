@@ -73,6 +73,12 @@ def check(url):
     return False, {}
 
 
+def price(text):
+    """Extract the price from e.g. 'B-Stock disponibil 10.690 lei din'."""
+    m = re.search(r"(\d[\d.,]*)\s*lei", text)
+    return m.group(1) if m else None
+
+
 def send_email(subject, body):
     user, password = os.environ.get("SMTP_USER"), os.environ.get("SMTP_PASS")
     if not (user and password):
@@ -102,16 +108,25 @@ def main():
             errors += 1
             continue
 
-        was_available = state.get(url, {}).get("available", False)
+        old = state.get(url, {})
+        was_available = old.get("available", False)
         print(f"{url}: B-Stock {'AVAILABLE' if available else 'not available'}"
               + (f" - {details['text']}" if available else ""))
 
-        # Notify only on the transition not-available -> available.
+        # Notify when B-Stock appears, or when its price changes.
+        name = url.rsplit("/", 1)[-1].removesuffix(".htm")
+        old_price, new_price = price(old.get("text", "")), price(details.get("text", ""))
+        subject = None
         if available and not was_available:
+            subject = f"B-Stock available: {name}"
+        elif available and old_price and new_price and old_price != new_price:
+            subject = f"B-Stock price changed: {name} {old_price} -> {new_price} lei"
+        if subject:
             sent = send_email(
-                "B-Stock available: " + url.rsplit("/", 1)[-1].removesuffix(".htm"),
-                f"{details['text']}\n\nB-Stock item: {details['bstock_url']}\n"
-                f"Product page: {url}\n",
+                subject,
+                f"{details['text']}\n"
+                + (f"Previous price: {old_price} lei\n" if was_available else "")
+                + f"\nB-Stock item: {details['bstock_url']}\nProduct page: {url}\n",
             )
             if not sent:
                 # Leave state unchanged so the alert is retried next run.
