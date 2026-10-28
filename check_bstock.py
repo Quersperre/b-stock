@@ -22,6 +22,15 @@ URLS = [
     "https://www.thomann.ro/taylor_414ce_next_generation_natural.htm",
     "https://www.thomann.ro/taylor_314ce_next_generation.htm",
     "https://www.thomann.ro/taylor_324ce_next_generation.htm",
+    "https://www.thomann.ro/taylor_324ce_studio_special_edition.htm",
+    "https://www.thomann.ro/taylor_be_324ce_next_generation.htm",
+    "https://www.thomann.ro/taylor_314ce_studio_seb.htm",
+    "https://www.thomann.ro/taylor_314ce_studio_natural.htm",
+    "https://www.thomann.ro/taylor_414ce_studio.htm",
+    "https://www.thomann.ro/taylor_414ce_studio_shaded_edgeburst.htm",
+    "https://www.thomann.ro/taylor_224ce_k_dlx_461433.htm",
+    "https://www.thomann.ro/taylor_14ce.htm",
+    "https://www.thomann.ro/taylor_24ce.htm",
 ]
 
 STATE_FILE = Path(__file__).with_name("state.json")
