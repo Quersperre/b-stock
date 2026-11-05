@@ -25,9 +25,7 @@
     "available": false
   },
   "https://www.thomann.ro/taylor_414ce_studio.htm": {
-    "available": true,
-    "text": "B-Stock disponibil 9.444 lei din",
-    "bstock_url": "https://www.thomann.ro/taylor_414ce_studio_b_stock.htm"
+    "available": false
   },
   "https://www.thomann.ro/taylor_414ce_studio_shaded_edgeburst.htm": {
     "available": true,
