@@ -18,7 +18,9 @@
     "available": false
   },
   "https://www.thomann.ro/taylor_314ce_studio_natural.htm": {
-    "available": false
+    "available": true,
+    "text": "B-Stock disponibil 9.899 lei din",
+    "bstock_url": "https://www.thomann.ro/taylor_314ce_studio_natural_b_stock.htm"
   },
   "https://www.thomann.ro/taylor_414ce_studio.htm": {
     "available": true,
